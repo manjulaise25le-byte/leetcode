@@ -1,0 +1,26 @@
+class Solution:
+    def canCross(self, stones):
+        n = len(stones)
+
+        if stones[1] != 1:
+            return False
+
+        stone_set = set(stones)
+
+        # dp[position] stores all jump sizes
+        # that can reach that stone
+        dp = {stone: set() for stone in stones}
+        dp[0].add(0)
+
+        for stone in stones:
+            for jump in dp[stone]:
+                for next_jump in (jump - 1, jump, jump + 1):
+                    if next_jump <= 0:
+                        continue
+
+                    next_stone = stone + next_jump
+
+                    if next_stone in stone_set:
+                        dp[next_stone].add(next_jump)
+
+        return len(dp[stones[-1]]) > 0
